@@ -73,3 +73,35 @@ nav.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
   toggle.setAttribute("aria-expanded", "false");
 }));
 document.querySelector("#year").textContent = new Date().getFullYear();
+
+// Project filters
+const chips=document.querySelectorAll(".chip");
+chips.forEach(chip=>chip.addEventListener("click",()=>{
+  chips.forEach(c=>c.classList.toggle("active",c===chip));
+  const f=chip.dataset.filter;
+  document.querySelectorAll(".project-card").forEach(card=>{
+    card.classList.toggle("is-hidden",f!=="all"&&card.dataset.category!==f);
+  });
+}));
+// Animated counters (run once, when visible)
+const nums=document.querySelectorAll(".stat-num");
+const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const run=el=>{
+  const target=+el.dataset.count,suffix=el.dataset.suffix||"";
+  if(reduce){el.textContent=target+suffix;return;}
+  const t0=performance.now(),dur=1400;
+  const step=now=>{
+    const p=Math.min((now-t0)/dur,1),e=1-Math.pow(1-p,3);
+    el.textContent=Math.round(target*e)+suffix;
+    if(p<1)requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+};
+if("IntersectionObserver" in window){
+  const io=new IntersectionObserver(entries=>entries.forEach(en=>{
+    if(en.isIntersecting){run(en.target);io.unobserve(en.target);}
+  }),{threshold:.6});
+  nums.forEach(n=>io.observe(n));
+}else{nums.forEach(run);}
+// Hero entrance (single orchestrated moment)
+document.querySelector(".hero-copy").classList.add("reveal-hero");
