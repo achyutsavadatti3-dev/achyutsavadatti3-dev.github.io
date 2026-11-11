@@ -1,107 +1,30 @@
-const projectDetails = {
-  nourish: {
-    title: "Nourishing Farms",
-    subtitle: "Reframing healthy food as something exciting, social and full of flavour.",
-    sections: [
-      ["The challenge", "Healthy food can often be perceived as boring or restrictive. The opportunity was to make the brand feel more engaging and culturally relevant."],
-      ["The approach", "Helped shape the brand communication around the thought 'healthy, not boring', building content and campaign ideas that made better-for-you food feel part of everyday occasions."],
-      ["Selected work", "Brand-building content, ambassador-led communication and a World Cup co-branding idea connecting match-time snacking with the product."],
-      ["My contribution", "Campaign ideation, social content strategy and creative communication. Individual ownership and final campaign assets will be added after the project materials are reviewed."]
-    ]
-  },
-  tata: {
-    title: "Tata Projects",
-    subtitle: "A thoughtful social approach for a brand with a strong legacy.",
-    sections: [
-      ["The context", "Communication for an established infrastructure brand needs to respect its legacy while remaining relevant to people today."],
-      ["The approach", "Developed social content around important cultural moments, people and milestones, alongside stories that showcased the scale and significance of projects."],
-      ["Selected work", "Festival and occasion-led communication, legacy storytelling and project showcases."],
-      ["My contribution", "Content ideation, calendar planning and creative communication. We will add selected approved posts and clarify individual ownership in the final case study."]
-    ]
-  },
-  infosys: {
-    title: "Infosys",
-    subtitle: "Making a global recognition feel human and tangible.",
-    sections: [
-      ["The opportunity", "Use the TIME and Statista World's Best Companies 2025 recognition to tell a story about people, technology and human potential."],
-      ["The idea", "Explore a public-facing magazine and newspaper-stand visual concept that brought the recognition into the physical world, supported by video storytelling."],
-      ["The execution", "Developed a user-generated video concept and explored AI-assisted video production to bring the idea to life."],
-      ["My contribution", "Creative ideation and campaign concept development. Final approved assets and exact delivery details will be added after review."]
-    ]
-  },
-  sany: {
-    title: "SANY India",
-    subtitle: "Integrated campaign thinking for bauma CONEXPO INDIA.",
-    sections: [
-      ["The brief", "Build a connected communication journey around a major industry exhibition, from anticipation to on-ground presence and post-event continuity."],
-      ["The approach", "Planned communication across pre-launch, launch and sustenance, with a focus on product stories, exhibition presence and audience engagement."],
-      ["The execution", "Campaign planning, Meta advertising, website keyword alignment, Google Ads coordination, creative direction and video-agency briefing."],
-      ["My contribution", "Brand and campaign planning, coordination with product and business stakeholders, and exhibition content delivery."]
-    ]
-  }
-};
-
-const dialog = document.querySelector(".project-dialog");
-const closeDialog = document.querySelector(".dialog-close");
-document.querySelectorAll(".project-card").forEach(card => {
-  card.addEventListener("click", () => {
-    const project = projectDetails[card.dataset.project];
-    document.querySelector("#dialog-title").textContent = project.title;
-    document.querySelector(".dialog-subtitle").textContent = project.subtitle;
-    const content = document.querySelector(".dialog-content");
-    content.replaceChildren();
-    project.sections.forEach(([heading, body]) => {
-      const h = document.createElement("h3"); h.textContent = heading;
-      const p = document.createElement("p"); p.textContent = body;
-      content.append(h, p);
-    });
-    dialog.showModal();
-  });
-});
-closeDialog.addEventListener("click", () => dialog.close());
-dialog.addEventListener("click", event => {
-  if (event.target === dialog) dialog.close();
-});
-const toggle = document.querySelector(".menu-toggle");
-const nav = document.querySelector(".main-nav");
-toggle.addEventListener("click", () => {
-  const open = nav.classList.toggle("open");
-  toggle.setAttribute("aria-expanded", String(open));
-});
-nav.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
-  nav.classList.remove("open");
-  toggle.setAttribute("aria-expanded", "false");
-}));
-document.querySelector("#year").textContent = new Date().getFullYear();
-
-// Project filters
-const chips=document.querySelectorAll(".chip");
-chips.forEach(chip=>chip.addEventListener("click",()=>{
-  chips.forEach(c=>c.classList.toggle("active",c===chip));
-  const f=chip.dataset.filter;
-  document.querySelectorAll(".project-card").forEach(card=>{
-    card.classList.toggle("is-hidden",f!=="all"&&card.dataset.category!==f);
-  });
-}));
-// Animated counters (run once, when visible)
-const nums=document.querySelectorAll(".stat-num");
-const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const run=el=>{
-  const target=+el.dataset.count,suffix=el.dataset.suffix||"";
-  if(reduce){el.textContent=target+suffix;return;}
-  const t0=performance.now(),dur=1400;
-  const step=now=>{
-    const p=Math.min((now-t0)/dur,1),e=1-Math.pow(1-p,3);
-    el.textContent=Math.round(target*e)+suffix;
-    if(p<1)requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
-};
-if("IntersectionObserver" in window){
-  const io=new IntersectionObserver(entries=>entries.forEach(en=>{
-    if(en.isIntersecting){run(en.target);io.unobserve(en.target);}
-  }),{threshold:.6});
-  nums.forEach(n=>io.observe(n));
-}else{nums.forEach(run);}
-// Hero entrance (single orchestrated moment)
-document.querySelector(".hero-copy").classList.add("reveal-hero");
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const V=(n,c="vh")=>`<video class="${c}" src="assets/videos/${n}.mp4" poster="assets/posters/${n}.jpg" controls preload="none" playsinline></video>`;
+const YT=id=>`<iframe class="vv" src="https://www.youtube.com/embed/${id}" loading="lazy" title="Bajaj Finance video" allow="encrypted-media;picture-in-picture" allowfullscreen></iframe>`;
+const P=(h,t)=>`<h4>${h}</h4><p>${t}</p>`;
+const W=[
+{c:"inf",tag:"Influencer Marketing",t:"Nourishing Farms #FarmtoFork",m:V("nourishing-farms"),x:P("The thought","Consumer conversations around healthy eating are often dominated by sacrifice and discipline. We challenged this by reframing healthy food as enjoyable, flavourful and lifestyle-driven, making wellness feel aspirational rather than obligatory.")+P("The ambassador","To launch the brand with an authentic wellness narrative, we identified Milind Soman as the ideal brand ambassador. His credibility in the fitness space bridged healthy eating and aspirational living, giving the brand immediate relevance and trust.")},
+{c:"inf",tag:"Influencer Marketing",t:"Klaus Multiparking",m:V("klaus-influencer","vv"),x:P("Influencer insight","Who knows a building better than the broker who sells it? We partnered with a real estate broker with a 1.2M following, someone who knows the pluses and minuses of every building, to make parking a topic buyers care about.")+P("Result","The video generated 100+ leads and brought in a healthy number of new followers.")},
+{c:"vid",tag:"Brand Campaign Video",t:"Infosys",m:V("infosys"),x:P("Creative insight","To celebrate Infosys' recognition among TIME &amp; Statista's World's Best Companies 2025, I built a concept inspired by New York's iconic magazine stands, using the TIME cover as the centerpiece of the story.")+P("Execution","Developed the complete video concept and produced an AI-generated film that transformed a corporate announcement into an engaging social-first narrative.")},
+{c:"vid",w:1,tag:"Brand Campaign Video",t:"Tata Projects",m:[1,2,3,4].map(i=>V("tata-"+i,"vv")).join(""),x:P("Objective","Strengthen Tata Projects' social media presence through timely, meaningful and brand-aligned content that reflected the organization's values, legacy, people and project excellence.")+P("Content strategy","Content built around cultural moments, national observances, corporate milestones and legacy project showcases to reinforce credibility, heritage and industry leadership, balancing relevance, storytelling and brand consistency.")},
+{c:"vid",tag:"Branded Content",t:"ZF Aftermarket",m:V("zf-aftermarket","v4"),x:P("Insight","ZF's aftermarket business is built on braking systems, where durability and reliability matter most. Instead of listing specs, the story shows these qualities in action.")+P("Execution","A short, social-first branded video tying the brand's braking expertise to everyday journeys.")},
+{c:"vid",tag:"Brand Campaign Video",t:"Klaus Multiparking × ET Now",m:V("klaus-bts","vv"),x:P("The campaign","A small talk show with ET Now on India's infrastructure, roads and cars, a natural fit for a brand building multiparking systems.")},
+{c:"vid",w:1,tag:"Fraud Awareness",t:"Bajaj Finance",m:["Zrqs8EVlMSY","zJf-RuB9hWs","c-DMO5xRVgw"].map(YT).join(""),x:P("Objective","Help customers recognise and avoid financial fraud through short videos that are easy to watch and share.")+P("Approach","Short-form videos that turn common fraud scenarios into simple, memorable lessons, while building trust in borrowing from a regulated NBFC.")},
+{c:"sta",w:1,tag:"Brand Static Campaign",t:"Klaus Multiparking × The Times of India",m:`<img src="assets/img/klaus-toi-1.webp" alt="Klaus Multiparking feature in The Times of India" loading="lazy"><img src="assets/img/klaus-toi-2.webp" alt="Klaus Multiparking newspaper creative" loading="lazy">`,x:P("The feature","A panel discussion on multi-level parking and urban mobility, organised by Klaus Multiparking in association with The Times of India, turned into a print feature and a social creative.")}
+];
+$("#grid").innerHTML=W.map(i=>`<article class="blk rv${i.w?" full":""}" data-c="${i.c}"><div class="cap"><div><small>${i.tag}</small><h3>${i.t}</h3></div><div class="bd">${i.x}</div></div><div class="pn">${i.m}</div></article>`).join("");
+const L=["klaus","infosys","bajaj-finance","tata-projects","nourishing-farms","fifth-estate","arai","sany","schaeffler","zf-aftermarket"];
+$("#logos").innerHTML=L.map(n=>`<img src="assets/logos/${n}.png" alt="${n.replace(/-/g," ")} logo">`).join("");
+const IC=[["AWP_BU.svg","Aerial work"],["Wind_BU.png","Wind"],["Mining_BU.svg","Mining"],["Port_BU.svg","Port"],["Road_BU.svg","Road"],["Foundation_BU.svg","Foundation"],["Crane.svg","Crane"],["Excavator.svg","Excavator"]];
+$("#icons").innerHTML=IC.map(([f,n],k)=>`<figure style="animation-delay:-${k*.5}s"><img src="assets/icons/${f}" alt="${n}"><figcaption>${n}</figcaption></figure>`).join("");
+$$("[data-mq]").forEach(e=>e.innerHTML+=e.innerHTML);
+$("#yr").textContent=new Date().getFullYear();
+$$(".tabs button").forEach(b=>b.onclick=()=>{$$(".tabs button").forEach(x=>x.classList.toggle("on",x===b));$$(".blk").forEach(c=>c.classList.toggle("hide",b.dataset.f!=="all"&&c.dataset.c!==b.dataset.f))});
+const mt=$(".mt"),nv=$("nav");mt.onclick=()=>mt.setAttribute("aria-expanded",nv.classList.toggle("open"));$$("nav a").forEach(a=>a.onclick=()=>nv.classList.remove("open"));
+const s=$("[data-split]");s.innerHTML=s.textContent.split(" ").map(w=>`<span class="wd">${w}</span>`).join(" ");
+const red=matchMedia("(prefers-reduced-motion:reduce)").matches;
+const cnt=e=>{const n=+e.dataset.n,s=e.dataset.s;if(red)return e.textContent=n+s;const t=performance.now();(function f(x){const p=Math.min((x-t)/1400,1);e.textContent=Math.round(n*(1-Math.pow(1-p,3)))+s;p<1&&requestAnimationFrame(f)})(t)};
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const t=e.target;if(t.matches("[data-n]"))cnt(t);else if(t.matches(".wd"))setTimeout(()=>t.classList.add("in"),t.dataset.d);else t.classList.add("in");io.unobserve(t)}),{threshold:.15});
+$$(".rv,[data-n]").forEach(e=>io.observe(e));$$(".wd").forEach((w,i)=>{w.dataset.d=i*45;io.observe(w)});
+$$(".blk video").forEach(v=>v.addEventListener("play",()=>$$(".blk video").forEach(o=>o!==v&&o.pause())));
+const fr=$(".frame");if(fr&&!red&&matchMedia("(hover:hover)").matches)addEventListener("mousemove",e=>{const x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;fr.style.transform=`rotate(${2.5+x*3}deg) translate(${x*10}px,${y*10}px)`});
